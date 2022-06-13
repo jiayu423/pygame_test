@@ -1,0 +1,18 @@
+- creating test
+    1. create a font
+    2. write text on surface
+    3. blit the text surface
+
+- text type can be mod by import .ttf files
+
+- import img.convert() or convert_alpha() will reformat png into something that pygame can work better with
+
+- rectangles
+    1. precise placement of img
+        1.1 surface for image information
+        2.2 placement via rectangle
+
+- to avoid multiple collision detections, can use invincibility frame
+
+- pg.mouse.get_pressed() will return a tuple of 3 boolean vars, representing lef, mid, and right button of the mouse
+    - For example, if right click, will return (False, False, True)

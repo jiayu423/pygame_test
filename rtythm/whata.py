@@ -96,7 +96,7 @@ pg.display.set_caption('Like a ')
 clock = pg.time.Clock()
 game_active = False
 
-# Background
+# Backgrounddsds
 background = pg.Surface(screen.get_size()).convert()
 background.fill((255, 255, 255))
 screen.blit(background, (0, 0))

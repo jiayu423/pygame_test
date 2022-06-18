@@ -94,7 +94,8 @@ def initNotes_test(notes: object, note_size: float, top_flower: float):
     beats = [np.ones((8, )),
              np.ones((4, ))*2,
              np.ones((8, )),
-             np.ones((4, ))*2]
+             np.ones((3, ))*2, np.array([0.5, 1, 0.5]),
+             np.array([0.5, 1.5, 0.5, 1, 0.5, 0.5, 1.5, 0.5, 1, 0.5])]
 
     beats = np.concatenate(beats)
 

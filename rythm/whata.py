@@ -90,28 +90,37 @@ def initNotes(notes: object, note_size: float, top_flower: float):
 
 
 def initNotes_test(notes: object, note_size: float, top_flower: float):
+    beats_raw = [np.ones((8,)),
+                 np.ones((4,)) * 2,
+                 np.ones((8,)),
+                 np.ones((3,)) * 2, np.array([0.5, 1, 0.5]),
+                 np.array([0.5, 1.5, 0.5, 1, 0.5, 0.5, 1.5, 0.5, 1, 0.5])]
 
-    beats = [np.ones((8, )),
-             np.ones((4, ))*2,
-             np.ones((8, )),
-             np.ones((3, ))*2, np.array([0.5, 1, 0.5]),
-             np.array([0.5, 1.5, 0.5, 1, 0.5, 0.5, 1.5, 0.5, 1, 0.5])]
+    beats = np.concatenate(beats_raw)
 
-    beats = np.concatenate(beats)
+    multiplier = np.zeros((len(beats),))
 
-    multiplier = np.zeros((len(beats), ))
+    pos_ = np.zeros(beats.shape)
 
-    for i in range(len(beats)-1):
+    col_ = 100
+    start_ = 0
+    for bar in beats_raw:
+        temp_note_len = len(bar)
+        pos_[start_:start_ + temp_note_len] = np.ones((temp_note_len,)) * col_
+        start_ += temp_note_len
+        col_ += 100
+        if col_ > 300: col_ = 100
+
+    for i in range(len(beats) - 1):
         # 2 times the previous beats + previous multi
-        multiplier[i+1] = 2 * beats[i] + multiplier[i]
+        multiplier[i + 1] = 2 * beats[i] + multiplier[i]
 
     # h = np.array([0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28])
-    note_ys = [(top_flower-2*note_size) - multiplier[i] * note_size for i in range(len(beats))]
+    note_ys = [(top_flower - 2 * note_size) - multiplier[i] * note_size for i in range(len(beats))]
     print(note_ys)
 
     for i in range(len(beats)):
-        notes.add(choice([Note([choice([100, 100, 100]), note_ys[i]]),
-                          Note([choice([100, 100, 100]), note_ys[i]])]))
+        notes.add(Note([pos_[i], note_ys[i]]))
 
 
 pg.init()

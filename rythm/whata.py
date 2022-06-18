@@ -90,10 +90,25 @@ def initNotes(notes: object, note_size: float, top_flower: float):
 
 
 def initNotes_test(notes: object, note_size: float, top_flower: float):
-    h = np.array([0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28])
-    note_ys = [(top_flower-4*note_size) - h[i] * note_size for i in range(len(h))]
 
-    for i in range(len(h)):
+    beats = [np.ones((8, )),
+             np.ones((4, ))*2,
+             np.ones((8, )),
+             np.ones((4, ))*2]
+
+    beats = np.concatenate(beats)
+
+    multiplier = np.zeros((len(beats), ))
+
+    for i in range(len(beats)-1):
+        # 2 times the previous beats + previous multi
+        multiplier[i+1] = 2 * beats[i] + multiplier[i]
+
+    # h = np.array([0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28])
+    note_ys = [(top_flower-2*note_size) - multiplier[i] * note_size for i in range(len(beats))]
+    print(note_ys)
+
+    for i in range(len(beats)):
         notes.add(choice([Note([choice([100, 100, 100]), note_ys[i]]),
                           Note([choice([100, 100, 100]), note_ys[i]])]))
 

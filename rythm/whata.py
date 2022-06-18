@@ -81,12 +81,22 @@ def initNotes(notes: object, note_size: float, top_flower: float):
     n_notes = n_notes + 5
 
     # list of notes y pos (the bottom of rect)
-    note_ys = [(top_flower) - i * note_size for i in range(n_notes)]
+    note_ys = [(top_flower) - i * note_size * 2 for i in range(n_notes)]
 
     # render notes on screen
     for i in range(n_notes):
-        notes.add(choice([Note([choice([100, 200, 300]), note_ys[i]]),
-                          RedNote([choice([100, 200, 300]), note_ys[i]])]))
+        notes.add(choice([Note([choice([100, 100, 100]), note_ys[i]]),
+                          Note([choice([100, 100, 100]), note_ys[i]])]))
+
+
+def initNotes_test(notes: object, note_size: float, top_flower: float):
+    h = np.array([0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28])
+    note_ys = [(top_flower-4*note_size) - h[i] * note_size for i in range(len(h))]
+
+    for i in range(len(h)):
+        notes.add(choice([Note([choice([100, 100, 100]), note_ys[i]]),
+                          Note([choice([100, 100, 100]), note_ys[i]])]))
+
 
 pg.init()
 
@@ -103,10 +113,10 @@ screen.blit(background, (0, 0))
 
 # music
 note_height = 33  # px
-bps = int(120 / 60)  # beats / s
+bps = 280 / 60  # beats / s
 dt = 17 / 1000  # ms
 
-bg_music = pg.mixer.Sound('bg3.wav')
+bg_music = pg.mixer.Sound('bg5.wav')
 
 # Text
 font = pg.font.Font(None, 24)
@@ -147,7 +157,7 @@ while True:
                 game_start = False
                 p1.score = 0
                 bg_music.play(loops=-1)
-                initNotes(notes, 33, 450)
+                initNotes_test(notes, 33, 450)
 
     if game_active:
         pg.mouse.set_visible(False)
@@ -166,9 +176,11 @@ while True:
         for note in notes:
             isCaught = note.caught(p1)
             if isCaught:
-                last_pos = notes.sprites()[-1].rect.topleft[-1]
-                notes.add(choice([Note([choice([100, 200, 300]), last_pos]),
-                                  RedNote([choice([100, 200, 300]), last_pos])]))
+                pass
+                # last_pos = notes.sprites()[-1].rect.topleft[-1]
+                # last_pos -= 33
+                # notes.add(choice([Note([choice([100, 100, 100]), last_pos]),
+                #                   Note([choice([100, 100, 100]), last_pos])]))
 
             # if not note.caught(p1):
             #     game_active = False

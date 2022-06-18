@@ -90,11 +90,18 @@ def initNotes(notes: object, note_size: float, top_flower: float):
 
 
 def initNotes_test(notes: object, note_size: float, top_flower: float):
+    # beats_raw = [np.ones((8,)),
+    #              np.ones((4,)) * 2,
+    #              np.ones((8,)),
+    #              np.ones((3,)) * 2, np.array([0.5, 1, 0.5]),
+    #              np.array([0.5, 1.5, 0.5, 1, 0.5, 0.5, 1.5, 0.5, 1, 0.5])]
+
     beats_raw = [np.ones((8,)),
                  np.ones((4,)) * 2,
                  np.ones((8,)),
-                 np.ones((3,)) * 2, np.array([0.5, 1, 0.5]),
-                 np.array([0.5, 1.5, 0.5, 1, 0.5, 0.5, 1.5, 0.5, 1, 0.5])]
+                 np.ones((3,)) * 2, np.array([0.5, 1, 0.5, 0.5]),
+                 np.array([1.5, 0.5, 1, 0.5, 0.5]),
+                 np.array([1.5, 0.5, 1, 0.5])]
 
     beats = np.concatenate(beats_raw)
 
@@ -120,6 +127,8 @@ def initNotes_test(notes: object, note_size: float, top_flower: float):
     print(note_ys)
 
     for i in range(len(beats)):
+        if i == 26 or i == 31:
+            continue
         notes.add(Note([pos_[i], note_ys[i]]))
 
 

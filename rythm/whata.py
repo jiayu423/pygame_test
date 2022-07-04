@@ -12,7 +12,7 @@ from GIFImage import GIFImage
 class Player(pg.sprite.Sprite):
     def __init__(self):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load("Cagney_transparent.webp")
+        self.image = pg.image.load("graphic/Cagney_transparent.webp")
         self.image = pg.transform.scale(self.image, (153, 276))
         self.rect = self.image.get_rect()
         self.offset = (-100, -50)
@@ -34,7 +34,7 @@ class Player(pg.sprite.Sprite):
 class Note(pg.sprite.Sprite):
     def __init__(self, start_pos):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load("Tear_weepy.webp")
+        self.image = pg.image.load("graphic/Tear_weepy.webp")
         #		self.image = pg.transform.scale(self.image, (50,100))
         self.rect = self.image.get_rect(midbottom=(start_pos[0], start_pos[1]))
         self.speed = 1
@@ -73,7 +73,7 @@ class Note(pg.sprite.Sprite):
 class RedNote(Note):
     def __init__(self, start_pos):
         Note.__init__(self, start_pos)
-        self.image = pg.image.load("Parriable_tear.webp")
+        self.image = pg.image.load("graphic/Parriable_tear.webp")
         self.value = 3
 
 
@@ -85,7 +85,7 @@ def initNotes(song: Songs, note_size: int, top_player: int):
     :param top_player: player top y position
     """
 
-    sus = song[1]
+    sus = song[-1]
     pos_x, pos_y = convertXY(song, note_size, top_player)
 
     # render notes on screen
@@ -154,7 +154,7 @@ note_height = 33  # px
 bps = KOKs[0]['bpm'] * KOKs[0]['beatRatio'] / 60  # beats / s
 dt = 17 / 1000  # ms
 
-bg_music = pg.mixer.Sound('bg5.wav')
+bg_music = pg.mixer.Sound('BGM/KOKs.wav')
 
 # Text
 font = pg.font.Font(None, 24)

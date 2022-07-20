@@ -149,12 +149,12 @@ screen.blit(background, (0, 0))
 
 # music
 songBase = Songs()
-KOKs = songBase.kingOfKings
+KOKs = songBase.BecauseYouWalkWithMe
 note_height = 33  # px
 bps = KOKs[0]['bpm'] * KOKs[0]['beatRatio'] / 60  # beats / s
 dt = 17 / 1000  # ms
 
-bg_music = pg.mixer.Sound('BGM/KOKs.wav')
+bg_music = pg.mixer.Sound('BGM/Because You Walk With Me.wav')
 
 # Text
 font = pg.font.Font(None, 24)

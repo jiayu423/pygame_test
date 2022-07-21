@@ -14,43 +14,90 @@ class Songs:
 
         # time signature: 4/4
         self.kingOfKings = [
-                            {'bpm': 70, 'beatRatio': 4},
-                            np.ones((8,)) * 2,
-                            np.ones((4,)) * 4,
-                            np.ones((8,)) * 2,
-                            np.ones((3,)) * 4, np.array([1, 2, 1, 1]),
-                            np.array([3, 1, 2, 1, 1]),
-                            np.array([3, 1, 2, 1]),
-                            [26, 31]
-                            ]
-        # 3/4
-        self.BecauseYouWalkWithMe = [
-                            {'bpm': 92, 'beatRatio': 4},
-                            np.ones((2,)) * 2,       # 处处
-                            np.ones((3,)) * 4,       # 留 - 下
-                            np.array([2, 2, 4, 4]),  # 有你同在
-                            np.array([2, 2, 4, 4]),  # 的恩典痕
-                            np.ones((3,)) * 4,       # 迹 - -
-                            np.array([4, 4, 2, 2]),  # - - 因你
-                            np.ones((3, )) * 4,      # 与我同
-                            np.array([4, 4, 2, 2]),  # 行，我就
-                            np.ones((3, )) * 4,      # 不会孤
-                            np.array([4, 4, 2, 2]),  # 寂，欢笑
-                            np.ones((3,)) * 4,       # 时你同
-                            np.array([4, 4, 2, 2]),  # 喜，悲伤
-                            np.ones((3,)) * 4,       # 时你共
-                            np.array([4]),           # 泣
-                            [14, 15, 16, 17, 24, 31, 38]
-            ]
-
-        # self.SYMSLL = [{'bpm': 110, 'beatRatio': 2},
-        #                ]
-
-        self.names = ['King of Kings', 'SYMSLL']
-        self.nSongs = len(self.names)
+            {'bpm': 70, 'beatRatio': 4},
+            np.ones((8,)) * 2,
+            np.ones((4,)) * 4,
+            np.ones((8,)) * 2,
+            np.ones((3,)) * 4, np.array([1, 2, 1, 1]),
+            np.array([3, 1, 2, 1, 1]),
+            np.array([3, 1, 2, 1]),
+            [26, 31]
+        ]
 
 
-def convertXY(song: Songs, note_size: int, top_player: int) -> list:
+class KingOfKings(Songs):
+
+    def __int__(self):
+        Songs.__init__(self)
+        self.bpm = 70
+        self.beatsRatio = 4
+        self.ignoredNotes = [26, 31]
+        self.beats = [
+            np.ones((8,)) * 2,
+            np.ones((4,)) * 4,
+            np.ones((8,)) * 2,
+            np.ones((3,)) * 4, np.array([1, 2, 1, 1]),
+            np.array([3, 1, 2, 1, 1]),
+            np.array([3, 1, 2, 1]),
+        ]
+
+
+class BecauseYouWalkWithMe:
+
+    def __init__(self):
+        self.bpm = 93
+        self.beatsRatio = 4
+        self.ignoredNotes = [14, 15, 16, 17, 24, 31, 38, 46, 54, 61, 77, 85, ]
+        self.beats = [
+            np.ones((2,)) * 2,  # 处处
+            np.ones((3,)) * 4,  # 留  下
+            np.array([2, 2, 4, 4]),  # 有你同在
+            np.array([2, 2, 4, 4]),  # 的恩典痕
+            np.ones((3,)) * 4,  # 迹 - -
+
+            np.array([4, 4, 2, 2]),  # - - 因你
+            np.ones((3,)) * 4,  # 与我同
+            np.array([4, 4, 2, 2]),  # 行 - 我就
+            np.ones((3,)) * 4,  # 不会孤
+            np.array([4, 4, 2, 2]),  # 寂 - 欢笑
+            np.ones((3,)) * 4,  # 时你同
+            np.array([4, 4, 2, 2]),  # 喜 - 悲伤
+            np.ones((3,)) * 4,  # 时你共
+            np.array([4]),  # 泣
+
+            np.array([4, 2, 2]),  # - 因你
+            np.ones((3,)) * 4,  # 是我力
+            np.array([4, 4, 2, 2]),  # 量 - 我就
+            np.ones((3,)) * 4,  # 不会绝
+            np.array([4, 4, 2, 2]),  # 望 - 困乏
+            np.ones((3,)) * 4,  # 软弱中
+            np.array([2, 2, 4, 4]),  # 有你赐恩
+            np.array([2, 2, 6, 2]),  # 我就得刚
+            np.array([4]),  # 强
+
+            np.array([4, 2, 2]),     # - 经风
+            np.array([6, 2, 2, 2]),  # 暴 过黑
+            np.array([4, 4, 2, 2]),  # 夜 - 度阡
+            np.array([6, 2, 2, 2]),  # 陌 越洋
+            np.array([4, 4, 2, 2]),  # 海 - 有你
+            np.ones((3,)) * 4,       # 手牵引
+            np.array([4, 4, 2, 2]),  # 我 - 我就
+            np.ones((3,)) * 4,       # 勇往向
+            np.array([4]),           # 前
+
+            np.array([4, 2, 2]),  # - 愿我
+            np.ones((3,)) * 4,  # 所行路
+            np.array([4, 4, 2, 2]),  # 径 - 愿我
+            np.ones((3,)) * 4,  # 所历际
+            np.array([4, 4, 2, 2]),  # 遇 - 处处
+            np.ones((3,)) * 4,  # 留 下
+            np.array([2, 2, 4, 4]),  # 有你同在
+            np.array([2, 2, 4, 4]),  # 的恩典痕
+            np.array([4]),  # 迹
+        ]
+
+
+def convertXY(song: object, note_size: int, top_player: int) -> list:
     """
     Convert counts to x and y position in the windows
     :param note_size: height of notes
@@ -59,22 +106,22 @@ def convertXY(song: Songs, note_size: int, top_player: int) -> list:
     :return: a list of notes x and y positions
     """
 
-    raw_beats = song[1:-1]
+    raw_beats = song.beats
     beats = np.concatenate(raw_beats)
     multiplier = np.zeros((len(beats),))
 
-    for i in range(len(beats) - 1):
+    for i in range(len(beats)-1):
         multiplier[i + 1] = beats[i] + multiplier[i]
 
     pos_y = [(top_player - 1 * note_size) - multiplier[i] * note_size for i in range(len(beats))]
 
     pos_x = np.zeros(beats.shape)
-    for i in range(len(pos_x)-1):
+    for i in range(len(pos_x)):
         x_ = [100, 200, 300]
         if i == 0:
             pos_x[i] = choice(x_)
         else:
-            x_.remove(pos_x[i-1])
+            x_.remove(pos_x[i - 1])
             pos_x[i] = choice(x_)
 
     # # generate note pos by cycling through [100, 200, 300]
@@ -89,6 +136,3 @@ def convertXY(song: Songs, note_size: int, top_player: int) -> list:
     #     if col_ > 300: col_ = 100
 
     return pos_x, pos_y
-
-
-

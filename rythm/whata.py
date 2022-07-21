@@ -77,7 +77,7 @@ class RedNote(Note):
         self.value = 3
 
 
-def initNotes(song: Songs, note_size: int, top_player: int):
+def initNotes(song: object, note_size: int, top_player: int):
     """
 
     :param song: a list of counts
@@ -85,7 +85,7 @@ def initNotes(song: Songs, note_size: int, top_player: int):
     :param top_player: player top y position
     """
 
-    sus = song[-1]
+    sus = song.ignoredNotes
     pos_x, pos_y = convertXY(song, note_size, top_player)
 
     # render notes on screen
@@ -148,10 +148,9 @@ background.fill((255, 255, 255))
 screen.blit(background, (0, 0))
 
 # music
-songBase = Songs()
-KOKs = songBase.BecauseYouWalkWithMe
+BYWM = BecauseYouWalkWithMe()
 note_height = 33  # px
-bps = KOKs[0]['bpm'] * KOKs[0]['beatRatio'] / 60  # beats / s
+bps = BYWM.bpm * BYWM.beatsRatio / 60  # beats / s
 dt = 17 / 1000  # ms
 
 bg_music = pg.mixer.Sound('BGM/Because You Walk With Me.wav')
@@ -194,7 +193,7 @@ while True:
                 p1.score = 0
                 bg_music.play(loops=-1)
                 # 450 is the player top y-pos
-                initNotes(KOKs, note_height, 450)
+                initNotes(BYWM, note_height, 450)
 
     if game_active:
         pg.mouse.set_visible(False)

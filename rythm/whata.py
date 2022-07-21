@@ -32,7 +32,7 @@ class Player(pg.sprite.Sprite):
 
 
 class Note(pg.sprite.Sprite):
-    def __init__(self, start_pos):
+    def __init__(self, start_pos, bpm):
         pg.sprite.Sprite.__init__(self)
         self.image = pg.image.load("graphic/Tear_weepy.webp")
         #		self.image = pg.transform.scale(self.image, (50,100))
@@ -40,6 +40,7 @@ class Note(pg.sprite.Sprite):
         self.speed = 1
         self.y_float = float(self.rect.y)
         self.value = 1
+        self.bpm = bpm
 
     def update(self):
         """
@@ -53,8 +54,8 @@ class Note(pg.sprite.Sprite):
         so 33/1 (pixel/notes) * 1/1 (notes/beats) * 60/60 (beats/s) * 1/60 (s/frame) = 33/60 (pixel/frame)
         so after 60 frames (which is 1 s), the note will travel 33 pixel (1 beat), which is what we want
         """
-        global dt, bps, note_height
-        self.speed = dt * bps * note_height
+        global dt, note_height, beatRatio
+        self.speed = dt * self.bpm/60 * note_height * beatRatio
         self.y_float += self.speed
         # self.rect.y += self.speed
         self.rect.y = int(self.y_float)
@@ -87,12 +88,13 @@ def initNotes(song: object, note_size: int, top_player: int):
 
     sus = song.ignoredNotes
     pos_x, pos_y = convertXY(song, note_size, top_player)
+    print(pos_y)
 
     # render notes on screen
     for i in range(len(pos_y)):
         if set(sus).intersection({i}):
             continue
-        notes.add(Note([pos_x[i], pos_y[i]]))
+        notes.add(Note([pos_x[i], pos_y[i]], song.bpm[i]))
 
 
 # def initNotes_test(notes: object, note_size: float, top_flower: float):
@@ -150,7 +152,8 @@ screen.blit(background, (0, 0))
 # music
 BYWM = BecauseYouWalkWithMe()
 note_height = 33  # px
-bps = BYWM.bpm * BYWM.beatsRatio / 60  # beats / s
+beatRatio = BYWM.beatsRatio
+# bps = BYWM.bpm * BYWM.beatsRatio / 60  # beats / s
 dt = 17 / 1000  # ms
 
 bg_music = pg.mixer.Sound('BGM/Because You Walk With Me.wav')

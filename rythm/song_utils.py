@@ -45,9 +45,10 @@ class KingOfKings(Songs):
 class BecauseYouWalkWithMe:
 
     def __init__(self):
-        self.bpm = 93
+        # self.bpm = 93
         self.beatsRatio = 4
-        self.ignoredNotes = [14, 15, 16, 17, 24, 31, 38, 46, 54, 61, 77, 85, ]
+        self.ignoredNotes = [14, 15, 16, 17, 24, 31, 38, 45, 52, 59, 74, 82, 90, 97, 104, 111, 118]
+        self.bpm = np.concatenate((np.ones(45, )*92, np.ones(133-45, )*93))
         self.beats = [
             np.ones((2,)) * 2,  # 处处
             np.ones((3,)) * 4,  # 留  下

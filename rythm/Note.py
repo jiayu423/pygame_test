@@ -2,9 +2,10 @@ import pygame as pg
 from SpriteSheet import SpriteSheet
 import itertools
 from random import choice
+import whata
 
 class Note(pg.sprite.Sprite):
-	def __init__(self, start_pos):
+	def __init__(self, start_pos, bpm):
 		pg.sprite.Sprite.__init__(self)
 		imageFile = choice(['FallingSheepUpsideDown.png', 'FallingSheep.png', 'FallingSheepRotating.png'])
 
@@ -16,9 +17,13 @@ class Note(pg.sprite.Sprite):
 		self.speed = 6
 		self.value = 1
 		self.counter = 0
+		self.y_float = float(self.rect.y)
+		self.bpm = bpm
 
 	def update(self):
-		self.rect.y += self.speed
+		self.speed = whata.dt * self.bpm/60 * self.rect.get_height() * whata.beatRatio
+		self.y_float += self.speed
+		self.rect.y = int(self.y_float)
 		self.counter += 1
 
 		#Counter to change to the next image

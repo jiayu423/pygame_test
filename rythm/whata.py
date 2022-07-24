@@ -7,30 +7,12 @@ from random import choice
 import numpy as np
 from song_utils import *
 from GIFImage import GIFImage
+from Player import Player
+from Note import Note
+import itertools
+from SpriteSheet import SpriteSheet
 
-
-class Player(pg.sprite.Sprite):
-    def __init__(self):
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load("graphic/Cagney_transparent.webp")
-        self.image = pg.transform.scale(self.image, (153, 276))
-        self.rect = self.image.get_rect()
-        self.offset = (-100, -50)
-        self.originY = 500
-        self.score = 0
-
-    def update(self):
-        pos = (pg.mouse.get_pos()[0], self.originY)
-        self.rect.topleft = pos
-        self.rect.move_ip(self.offset)
-
-    def incScore(self, value):
-        self.score += value
-
-    def getScore(self):
-        return self.score
-
-
+"""
 class Note(pg.sprite.Sprite):
     def __init__(self, start_pos, bpm):
         pg.sprite.Sprite.__init__(self)
@@ -43,7 +25,7 @@ class Note(pg.sprite.Sprite):
         self.bpm = bpm
 
     def update(self):
-        """
+        
         The current rhythm system works as follows:
         suppose we have a 60 bpm song, meaning 1 beat per second.
         if each of our note corresponds to 1 beat (1 note : 1 beat, this ratio can change),
@@ -53,7 +35,7 @@ class Note(pg.sprite.Sprite):
         suppose our game is running at 60 fps, meaning that 1/60 s will pass between each frame
         so 33/1 (pixel/notes) * 1/1 (notes/beats) * 60/60 (beats/s) * 1/60 (s/frame) = 33/60 (pixel/frame)
         so after 60 frames (which is 1 s), the note will travel 33 pixel (1 beat), which is what we want
-        """
+        
         global dt, note_height, beatRatio
         self.speed = dt * self.bpm/60 * note_height * beatRatio
         self.y_float += self.speed
@@ -69,14 +51,34 @@ class Note(pg.sprite.Sprite):
             return False
         else:
             return False
+"""
 
+def aspect_scale(img, bx,by):
+        """ Scales 'img' to fit into box bx/by.
+        This method will retain the original image's aspect ratio """
+        ix,iy = img.get_size()
+        if ix > iy:
+            # fit to width
+            scale_factor = bx/float(ix)
+            sy = scale_factor * iy
+            if sy > by:
+                scale_factor = by/float(iy)
+                sx = scale_factor * ix
+                sy = by
+            else:
+                sx = bx
+        else:
+            # fit to height
+            scale_factor = by/float(iy)
+            sx = scale_factor * ix
+            if sx > bx:
+                scale_factor = bx/float(ix)
+                sx = bx
+                sy = scale_factor * iy
+            else:
+                sy = by
 
-class RedNote(Note):
-    def __init__(self, start_pos):
-        Note.__init__(self, start_pos)
-        self.image = pg.image.load("graphic/Parriable_tear.webp")
-        self.value = 3
-
+        return pg.transform.scale(img, (sx,sy))
 
 def initNotes(song: object, note_size: int, top_player: int):
     """
@@ -94,7 +96,8 @@ def initNotes(song: object, note_size: int, top_player: int):
     for i in range(len(pos_y)):
         if set(sus).intersection({i}):
             continue
-        notes.add(Note([pos_x[i], pos_y[i]], song.bpm[i]))
+        speed = dt * song.bpm[i]/60 * note_height * beatRatio
+        notes.add(Note([pos_x[i], pos_y[i]], speed))
 
 
 # def initNotes_test(notes: object, note_size: float, top_flower: float):
@@ -145,13 +148,14 @@ clock = pg.time.Clock()
 game_active = False
 
 # Backgrounddsds
-background = pg.Surface(screen.get_size()).convert()
-background.fill((255, 255, 255))
+background = pg.image.load('graphic/ParkBackground.jpg').convert()
+background = aspect_scale(background, 4000, 800)
 screen.blit(background, (0, 0))
 
 # music
 BYWM = BecauseYouWalkWithMe()
-note_height = 33  # px
+note_height = 60  
+# px
 beatRatio = BYWM.beatsRatio
 # bps = BYWM.bpm * BYWM.beatsRatio / 60  # beats / s
 dt = 17 / 1000  # ms
@@ -161,7 +165,7 @@ bg_music = pg.mixer.Sound('BGM/Because You Walk With Me.wav')
 # Text
 font = pg.font.Font(None, 24)
 text = font.render("Click to Start", True, (10, 10, 10))
-textpos = text.get_rect(centerx=background.get_width() / 2, y=150)
+textpos = text.get_rect(centerx=screen.get_width() / 2, y=150)
 screen.blit(text, textpos)
 
 pg.display.flip()
@@ -173,8 +177,10 @@ player.add(p1)
 
 notes = pg.sprite.Group()
 
-note_timer = pg.USEREVENT + 1
-pg.time.set_timer(note_timer, 350)
+#Game Over Images
+rest_sprite_iter = itertools.cycle(SpriteSheet("graphic/Rest Sprite.png", 500, 500).load_grid_images(1,2,x_margin=0,x_padding=0,y_margin=0,y_padding=0))
+rest_sprite = next(rest_sprite_iter)
+ggTimer = 50
 
 game_start = True
 
@@ -186,17 +192,18 @@ while True:
         elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
             pg.quit()
             exit()
-        # if game_active:
-        #     if event.type == note_timer:
-        #         notes.add(choice([Note(choice([100, 200, 300])), RedNote(choice([100, 200, 300]))]))
         else:
+            if event.type == pg.MOUSEBUTTONDOWN and not game_active:
+                # 450 is the player top y-pos
+                initNotes(BYWM, note_height, 500)
+                bg_music.play(loops=-1)
+                p1.score = 0
             if event.type == pg.MOUSEBUTTONDOWN:
                 game_active = True
                 game_start = False
-                p1.score = 0
-                bg_music.play(loops=-1)
-                # 450 is the player top y-pos
-                initNotes(BYWM, note_height, 450)
+                
+                
+            
 
     if game_active:
         pg.mouse.set_visible(False)
@@ -213,28 +220,27 @@ while True:
         screen.blit(score_surf, score_rect)
 
         for note in notes:
-            isCaught = note.caught(p1)
-            if isCaught:
-                pass
-                # last_pos = notes.sprites()[-1].rect.topleft[-1]
-                # last_pos -= 33
-                # notes.add(choice([Note([choice([100, 100, 100]), last_pos]),
-                #                   Note([choice([100, 100, 100]), last_pos])]))
-
-            # if not note.caught(p1):
-            #     game_active = False
-            #     break
+            if not note.caught(p1):
+                game_active = False
+                break
 
     elif not game_start:
+        bg_music.stop()
         pg.mouse.set_visible(True)
         notes.empty()
         final_score = p1.getScore()
         screen.blit(background, (0, 0))
+        #Display Score
         score_surf = font.render('Score: {}'.format(final_score), False, (64, 64, 64))
         score_rect = score_surf.get_rect(center=(200, 100))
         screen.blit(score_surf, score_rect)
         screen.blit(text, textpos)
-    # flower_gif.render(screen,(-50,300))
+        #Display Images
+        if ggTimer <= 0:
+            rest_sprite = next(rest_sprite_iter)
+            ggTimer = 50
+        ggTimer -= 1
+        screen.blit(rest_sprite, rest_sprite.get_rect(center = (200,570)))
 
     pg.display.flip()
     dt = clock.tick(60) / 1000

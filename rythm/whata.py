@@ -90,7 +90,6 @@ def initNotes(song: object, note_size: int, top_player: int):
 
     sus = song.ignoredNotes
     pos_x, pos_y = convertXY(song, note_size, top_player)
-    print(pos_y)
 
     # render notes on screen
     for i in range(len(pos_y)):

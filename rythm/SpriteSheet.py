@@ -15,7 +15,7 @@ import pygame
 
 class SpriteSheet:
 
-    def __init__(self, filename, bx, by):
+    def __init__(self, filename, bx=10000, by=10000):
         """Load the sheet."""
         try:
             self.sheet = pygame.image.load(filename)

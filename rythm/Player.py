@@ -23,7 +23,7 @@ class Player(pg.sprite.Sprite):
 			filename = 'WalkSprite.png'
 
 			#Modify this to scale the images
-			images_ss = SpriteSheet('WalkSprite.png', bx=153)
+			images_ss = SpriteSheet('graphic/WalkSprite.png', bx=153)
 			player_images = images_ss.load_grid_images(7,1, x_margin = 20, y_margin = 20, y_padding = 40)
 			return itertools.cycle(player_images)
 		

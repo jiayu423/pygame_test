@@ -13,9 +13,14 @@ class Player(pg.sprite.Sprite):
 			self.rect = self.image.get_rect()
 			self.pre_x_pos = pg.mouse.get_pos()[0]
 			self.offset = (-100, -50)
+			self.catchLeft = SpriteSheet.aspect_scale(self, pg.image.load("graphic/CatchLeft.png"), 120, 1000)
+			self.catchLeft.set_colorkey(pg.Color("black"), pg.RLEACCEL)
+			self.catchCount = 0
+			self.walkCount = 0
+			self.flip = False
 
 			#Y position of Player
-			self.originY = 550
+			self.originY = 560
 			self.score = 0
 			
 		def _load_images(self):
@@ -24,24 +29,40 @@ class Player(pg.sprite.Sprite):
 
 			#Modify this to scale the images
 			images_ss = SpriteSheet('graphic/WalkSprite.png', bx=153)
-			player_images = images_ss.load_grid_images(7,1, x_margin = 20, y_margin = 20, y_padding = 40)
+			player_images = images_ss.load_grid_images(7,1, x_margin = 20, y_margin = 30, y_padding = 60)
 			return itertools.cycle(player_images)
 		
 		def update(self):
-			pos = (pg.mouse.get_pos()[0], self.originY)
-			self._walk(pos[0]-self.pre_x_pos)
+			if self.catchCount != 0:
+				self.image = self.catchLeft
+				pos = (pg.mouse.get_pos()[0], 510)
+				self.catchCount -= 1
+				self.walkCount = 0
+			else:
+				self._walk(pg.mouse.get_pos()[0]-self.pre_x_pos)
+				pos = (pg.mouse.get_pos()[0], self.originY)
 			self.pre_x_pos = pos[0]
 			self.rect.topleft = pos
 			self.rect.move_ip(self.offset)
 			
 		def _walk(self, change):
-			if change < -3:
+			if change < 0 and self.walkCount == 0:
 				self.image = next(self.player_images_iter)
-			elif change > 3:
+				self.walkCount = 15
+				self.flip = False
+			elif self.walkCount == 0 :
+				self.flip = True
 				self.image = pg.transform.flip(next(self.player_images_iter), True, False)
+				self.walkCount = 15
+			
+			self.walkCount -= 1
 				
 		def incScore(self, value):
 			self.score += value
+			self.catchCount = 10
+
+
 			
 		def getScore(self):
 			return self.score
+			

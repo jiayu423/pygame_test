@@ -19,9 +19,8 @@ class SpriteSheet:
         """Load the sheet."""
         try:
             self.sheet = pygame.image.load(filename)
+            self.sheet = self.aspect_scale(self.sheet, bx, by)
             self.sheet = self.sheet.convert_alpha()
-            self.bx = bx
-            self.by = by
         except:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
@@ -63,7 +62,7 @@ class SpriteSheet:
                 colorkey = image.get_at((0,0))
             image.set_colorkey(colorkey, pygame.RLEACCEL)
         image.blit(self.sheet, (0, 0), rect)
-        return self.aspect_scale(image, self.bx, self.by)
+        return image
 
     def images_at(self, rects, colorkey = pygame.Color("black")):
         """Load a whole bunch of images and return them as a list."""

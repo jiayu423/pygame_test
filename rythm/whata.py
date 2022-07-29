@@ -11,6 +11,7 @@ from Player import Player
 from Note import Note
 import itertools
 from SpriteSheet import SpriteSheet
+from Follower import Follower
 
 """
 class Note(pg.sprite.Sprite):
@@ -170,8 +171,10 @@ screen.blit(text, textpos)
 pg.display.flip()
 
 # Groups
-player = pg.sprite.GroupSingle()
+player = pg.sprite.Group()
 p1 = Player()
+followers = Follower(p1)
+player.add(followers)
 player.add(p1)
 
 notes = pg.sprite.Group()
@@ -191,18 +194,15 @@ while True:
         elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
             pg.quit()
             exit()
-        else:
-            if event.type == pg.MOUSEBUTTONDOWN and not game_active:
+        elif event.type == pg.MOUSEBUTTONDOWN and not game_active:
                 # 450 is the player top y-pos
-                initNotes(BYWM, note_height, 500)
+                initNotes(BYWM, note_height, 530)
                 bg_music.play(loops=-1)
                 p1.score = 0
-            if event.type == pg.MOUSEBUTTONDOWN:
                 game_active = True
                 game_start = False
-                
-                
-            
+        elif event.type == pg.KEYDOWN and event.key == pg.K_r:
+                game_active = False
 
     if game_active:
         pg.mouse.set_visible(False)
@@ -227,6 +227,7 @@ while True:
         bg_music.stop()
         pg.mouse.set_visible(True)
         notes.empty()
+        followers.clear()
         final_score = p1.getScore()
         screen.blit(background, (0, 0))
         #Display Score

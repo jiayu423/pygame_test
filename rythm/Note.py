@@ -6,7 +6,8 @@ from random import choice
 class Note(pg.sprite.Sprite):
 	def __init__(self, start_pos, speed):
 		pg.sprite.Sprite.__init__(self)
-		imageFile = choice(['graphic/FallingSheepUpsideDown.png', 'graphic/FallingSheep.png', 'graphic/FallingSheepRotating.png'])
+		# imageFile = choice(['graphic/FallingSheepUpsideDown.png', 'graphic/FallingSheep.png', 'graphic/FallingSheepRotating.png'])
+		imageFile = choice(['graphic/FallingSheep.png'])
 
 		#Modify this to change the scale of the SpriteSheet
 		self.image_iter = itertools.cycle(SpriteSheet(imageFile,80).load_grid_images(2,1,x_margin =10, x_padding=20, y_margin =15, y_padding =30))

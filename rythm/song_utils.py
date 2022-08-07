@@ -47,8 +47,9 @@ class BecauseYouWalkWithMe:
     def __init__(self):
         # self.bpm = 93
         self.beatsRatio = 4
-        self.ignoredNotes = [14, 15, 16, 17, 24, 31, 38, 45, 52, 59, 74, 82, 90, 97, 104, 111, 118]
-        self.bpm = np.concatenate((np.ones(45, )*91, np.ones(133-45, )*91))
+        self.ignoredNotes = np.array([24, 31, 38, 45, 52, 59, 74, 82, 90, 97, 104, 111, 118]) - 18
+        self.bpm = np.concatenate((np.ones(74, ) * 96, np.ones(133 - 74, ) * 97))
+        self.introEndPoint = 17
         self.beats = [
             np.ones((2,)) * 2,  # 处处
             np.ones((3,)) * 4,  # 留  下
@@ -56,6 +57,7 @@ class BecauseYouWalkWithMe:
             np.array([2, 2, 4, 4]),  # 的恩典痕
             np.ones((3,)) * 4,  # 迹 - -
 
+            # 16
             np.array([4, 4, 2, 2]),  # - - 因你
             np.ones((3,)) * 4,  # 与我同
             np.array([4, 4, 2, 2]),  # 行 - 我就
@@ -66,6 +68,7 @@ class BecauseYouWalkWithMe:
             np.ones((3,)) * 4,  # 时你共
             np.array([4]),  # 泣
 
+            # 45
             np.array([4, 2, 2]),  # - 因你
             np.ones((3,)) * 4,  # 是我力
             np.array([4, 4, 2, 2]),  # 量 - 我就
@@ -76,6 +79,7 @@ class BecauseYouWalkWithMe:
             np.array([2, 2, 6, 2]),  # 我就得刚
             np.array([4]),  # 强
 
+            # 74
             np.array([4, 2, 2]),     # - 经风
             np.array([6, 2, 2, 2]),  # 暴 过黑
             np.array([4, 4, 2, 2]),  # 夜 - 度阡
@@ -96,6 +100,23 @@ class BecauseYouWalkWithMe:
             np.array([2, 2, 4, 4]),  # 的恩典痕
             np.array([4]),  # 迹
         ]
+        self.beatsPosX = np.array([1, 1, 1, 2, 3, 2,
+                                   1, 1, 2, 1, 2, 3, 2,
+                                   1, 1, 1, 1, 2, 3, 2,
+                                   1, 1, 2, 1, 2, 3, 2,
+                                   1, 1, 1, 1, 2, 3, 2,
+                                   1, 1, 2, 1, 2, 3, 2,
+                                   1, 1, 1, 1, 2, 2, 3,
+                                   2, 1, 2, 3, 2, 1, 2, 2,  # 我就得刚强
+                                   1, 2, 2, 1, 3.2, 2.4, 1.6,
+                                   0.8, 1, 2, 2, 3, 0.8, 1.6, 2.4,
+                                   3.2, 1, 1, 1, 1, 2, 3, 2,
+                                   1, 1, 2, 1, 2, 3, 2,
+                                   1, 1, 1, 1, 2, 3, 2,
+                                   1, 1, 2, 1, 2, 3, 2,
+                                   1, 1, 1, 1, 2, 2, 3,
+                                   2, 1, 2, 3, 2, 1, 2, 2])
+        # self.beatsPosX = None
 
 
 def convertXY(song: object, note_size: int, top_player: int) -> list:
@@ -111,29 +132,23 @@ def convertXY(song: object, note_size: int, top_player: int) -> list:
     beats = np.concatenate(raw_beats)
     multiplier = np.zeros((len(beats),))
 
-    for i in range(len(beats)-1):
+    for i in range(len(beats) - 1):
         multiplier[i + 1] = beats[i] + multiplier[i]
 
     pos_y = [(top_player - 1 * note_size) - multiplier[i] * note_size for i in range(len(beats))]
 
-    pos_x = np.zeros(beats.shape)
-    for i in range(len(pos_x)):
-        x_ = [100, 200, 300]
-        if i == 0:
-            pos_x[i] = choice(x_)
-        else:
-            x_.remove(pos_x[i - 1])
-            pos_x[i] = choice(x_)
+    if song.beatsPosX is not None:
+        pos_x = (song.beatsPosX * 100).astype(int)
+        return pos_x, pos_y[song.introEndPoint + 1:]
+    else:
+        pos_x = (np.ones(beats.shape) * 200).astype(int)
+        # pos_x = np.zeros(beats.shape)
+        # for i in range(len(pos_x)):
+        #     x_ = [100, 200, 300]
+        #     if i == 0:
+        #         pos_x[i] = choice(x_)
+        #     else:
+        #         x_.remove(pos_x[i - 1])
+        #         pos_x[i] = choice(x_)
 
-    # # generate note pos by cycling through [100, 200, 300]
-    # pos_x = np.zeros(beats.shape)
-    # col_ = 100
-    # start_ = 0
-    # for bar in raw_beats:
-    #     temp_note_len = len(bar)
-    #     pos_x[start_:start_ + temp_note_len] = np.ones((temp_note_len,)) * col_
-    #     start_ += temp_note_len
-    #     col_ += 100
-    #     if col_ > 300: col_ = 100
-
-    return pos_x, pos_y
+        return pos_x[song.introEndPoint + 1:], pos_y[song.introEndPoint + 1:]

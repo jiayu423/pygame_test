@@ -91,12 +91,14 @@ def initNotes(song: object, note_size: int, top_player: int):
 
     sus = song.ignoredNotes
     pos_x, pos_y = convertXY(song, note_size, top_player)
+    bpm = song.bpm[song.introEndPoint+1:]
 
     # render notes on screen
     for i in range(len(pos_y)):
         if set(sus).intersection({i}):
             continue
-        speed = dt * song.bpm[i]/60 * note_height * beatRatio
+
+        speed = 16/1000 * bpm[i]/60 * note_height * beatRatio
         notes.add(Note([pos_x[i], pos_y[i]], speed))
 
 
@@ -154,7 +156,7 @@ screen.blit(background, (0, 0))
 
 # music
 BYWM = BecauseYouWalkWithMe()
-note_height = 60  
+note_height = 50
 # px
 beatRatio = BYWM.beatsRatio
 # bps = BYWM.bpm * BYWM.beatsRatio / 60  # beats / s
@@ -196,7 +198,7 @@ while True:
             exit()
         elif event.type == pg.MOUSEBUTTONDOWN and not game_active:
                 # 450 is the player top y-pos
-                initNotes(BYWM, note_height, 530)
+                initNotes(BYWM, note_height, 510)
                 bg_music.play(loops=-1)
                 p1.score = 0
                 game_active = True

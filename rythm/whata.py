@@ -175,8 +175,8 @@ pg.display.flip()
 # Groups
 player = pg.sprite.Group()
 p1 = Player()
-followers = Follower(p1)
-player.add(followers)
+# followers = Follower(p1)
+# player.add(followers)
 player.add(p1)
 
 notes = pg.sprite.Group()
@@ -229,7 +229,7 @@ while True:
         bg_music.stop()
         pg.mouse.set_visible(True)
         notes.empty()
-        followers.clear()
+        # followers.clear()
         final_score = p1.getScore()
         screen.blit(background, (0, 0))
         #Display Score

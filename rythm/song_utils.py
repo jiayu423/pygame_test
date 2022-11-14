@@ -48,7 +48,7 @@ class BecauseYouWalkWithMe:
         # self.bpm = 93
         self.beatsRatio = 4
         self.ignoredNotes = np.array([24, 31, 38, 45, 52, 59, 74, 82, 90, 97, 104, 111, 118, 133, 134, 135, 136]) - 18
-        self.bpm = np.concatenate((np.ones(82, ) * 96, np.ones(254 - 82, ) * 97))
+        self.bpm = np.concatenate((np.ones(74, ) * 98, np.ones(199 - 74, ) * 99, np.ones(254 - 199, ) * 99.2))
         self.introEndPoint = 17
         self.beats = [
             np.ones((2,)) * 2,  # 处处
@@ -90,6 +90,7 @@ class BecauseYouWalkWithMe:
             np.ones((3,)) * 4,       # 勇往向
             np.array([4]),           # 前
 
+            # 106
             np.array([4, 2, 2]),  # - 愿我
             np.ones((3,)) * 4,  # 所行路
             np.array([4, 4, 2, 2]),  # 径 - 愿我
@@ -100,6 +101,7 @@ class BecauseYouWalkWithMe:
             np.array([2, 2, 4, 4]),  # 的恩典痕
             np.ones((3,)) * 4,  # 迹 - -
 
+            # 141
             np.array([4, 4, 2, 2]),  # - - 因你
             np.ones((3,)) * 4,  # 与我同
             np.array([4, 4, 2, 2]),  # 行 - 我就
@@ -110,6 +112,7 @@ class BecauseYouWalkWithMe:
             np.ones((3,)) * 4,  # 时你共
             np.array([4]),  # 泣
 
+            # 170
             np.array([4, 2, 2]),  # - 因你
             np.ones((3,)) * 4,  # 是我力
             np.array([4, 4, 2, 2]),  # 量 - 我就
@@ -120,6 +123,7 @@ class BecauseYouWalkWithMe:
             np.array([2, 2, 6, 2]),  # 我就得刚
             np.array([4]),  # 强
 
+            # 199
             np.array([4, 2, 2]),  # - 经风
             np.array([6, 2, 2, 2]),  # 暴 过黑
             np.array([4, 4, 2, 2]),  # 夜 - 度阡

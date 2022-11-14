@@ -33,18 +33,18 @@ class Player(pg.sprite.Sprite):
 			return itertools.cycle(player_images)
 		
 		def update(self):
-			# if self.catchCount != 0:
-			# 	self.image = self.catchLeft
-			# 	pos = (pg.mouse.get_pos()[0], 510)
-			# 	self.catchCount -= 1
-			# 	self.walkCount = 0
-			#
-			# else:
-			self._walk(pg.mouse.get_pos()[0]-self.pre_x_pos)
-			pos = (pg.mouse.get_pos()[0], self.originY)
-			self.pre_x_pos = pos[0]
-			self.rect.topleft = pos
-			self.rect.move_ip(self.offset)
+			if self.catchCount != 0:
+				self.image = self.catchLeft
+				pos = (pg.mouse.get_pos()[0], 510)
+				self.catchCount -= 1
+				self.walkCount = 0
+
+			else:
+				self._walk(pg.mouse.get_pos()[0]-self.pre_x_pos)
+				pos = (pg.mouse.get_pos()[0], self.originY)
+				self.pre_x_pos = pos[0]
+				self.rect.topleft = pos
+				self.rect.move_ip(self.offset)
 			# print(self.rect.topright)
 			
 		def _walk(self, change):
@@ -52,7 +52,7 @@ class Player(pg.sprite.Sprite):
 				self.image = next(self.player_images_iter)
 				self.walkCount = 15
 				self.flip = False
-			elif self.walkCount == 0 :
+			elif self.walkCount == 0:
 				self.flip = True
 				self.image = pg.transform.flip(next(self.player_images_iter), True, False)
 				self.walkCount = 15

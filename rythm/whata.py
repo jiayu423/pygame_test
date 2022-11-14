@@ -13,46 +13,6 @@ import itertools
 from SpriteSheet import SpriteSheet
 from Follower import Follower
 
-"""
-class Note(pg.sprite.Sprite):
-    def __init__(self, start_pos, bpm):
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load("graphic/Tear_weepy.webp")
-        #		self.image = pg.transform.scale(self.image, (50,100))
-        self.rect = self.image.get_rect(midbottom=(start_pos[0], start_pos[1]))
-        self.speed = 1
-        self.y_float = float(self.rect.y)
-        self.value = 1
-        self.bpm = bpm
-
-    def update(self):
-        
-        The current rhythm system works as follows:
-        suppose we have a 60 bpm song, meaning 1 beat per second.
-        if each of our note corresponds to 1 beat (1 note : 1 beat, this ratio can change),
-        then it means that we need to 'kill' one note per second.
-        (The notes are killed when their bottom y touches the top y of the player.)
-        So to kill 1 notes/s, we need the note to travel exactly its height each second
-        suppose our game is running at 60 fps, meaning that 1/60 s will pass between each frame
-        so 33/1 (pixel/notes) * 1/1 (notes/beats) * 60/60 (beats/s) * 1/60 (s/frame) = 33/60 (pixel/frame)
-        so after 60 frames (which is 1 s), the note will travel 33 pixel (1 beat), which is what we want
-        
-        global dt, note_height, beatRatio
-        self.speed = dt * self.bpm/60 * note_height * beatRatio
-        self.y_float += self.speed
-        # self.rect.y += self.speed
-        self.rect.y = int(self.y_float)
-
-    def caught(self, player):
-        if self.rect.colliderect(player.rect):
-            player.incScore(self.value)
-            self.kill()
-            return True
-        elif self.rect.y > 450:
-            return False
-        else:
-            return False
-"""
 
 def aspect_scale(img, bx,by):
         """ Scales 'img' to fit into box bx/by.
@@ -102,45 +62,6 @@ def initNotes(song: object, note_size: int, top_player: int):
         notes.add(Note([pos_x[i], pos_y[i]], speed))
 
 
-# def initNotes_test(notes: object, note_size: float, top_flower: float):
-#
-#     # value of each rain drop
-#     # 1 beat gets a value of 2, 1/2 beat gets a value of 1
-#     beats_raw = [np.ones((8,)),
-#                  np.ones((4,)) * 2,
-#                  np.ones((8,)),
-#                  np.ones((3,)) * 2, np.array([0.5, 1, 0.5, 0.5]),
-#                  np.array([1.5, 0.5, 1, 0.5, 0.5]),
-#                  np.array([1.5, 0.5, 1, 0.5])]
-#
-#     beats = np.concatenate(beats_raw)
-#
-#     multiplier = np.zeros((len(beats),))
-#
-#     for i in range(len(beats) - 1):
-#         # 2 times the previous beats + previous multi
-#         multiplier[i + 1] = 2 * beats[i] + multiplier[i]
-#
-#     # generate note pos by cycling through [100, 200, 300]
-#     pos_ = np.zeros(beats.shape)
-#     col_ = 100
-#     start_ = 0
-#     for bar in beats_raw:
-#         temp_note_len = len(bar)
-#         pos_[start_:start_ + temp_note_len] = np.ones((temp_note_len,)) * col_
-#         start_ += temp_note_len
-#         col_ += 100
-#         if col_ > 300: col_ = 100
-#
-#     note_ys = [(top_flower - 2 * note_size) - multiplier[i] * note_size for i in range(len(beats))]
-#
-#     for i in range(len(beats)):
-#         # pos of silent notes
-#         # if i == 26 or i == 31:
-#         #     continue
-#         notes.add(Note([pos_[i], note_ys[i]]))
-
-
 pg.init()
 
 # Screen
@@ -160,7 +81,7 @@ note_height = 50
 # px
 beatRatio = BYWM.beatsRatio
 # bps = BYWM.bpm * BYWM.beatsRatio / 60  # beats / s
-dt = 17 / 1000  # ms
+# dt = 17 / 1000  # ms
 
 bg_music = pg.mixer.Sound('BGM/Because You Walk With Me.wav')
 
@@ -189,6 +110,8 @@ ggTimer = 50
 game_start = True
 
 while True:
+
+    st = time.time()
     for event in pg.event.get():
         if event.type == pg.QUIT:
             pg.quit()
@@ -242,7 +165,13 @@ while True:
             rest_sprite = next(rest_sprite_iter)
             ggTimer = 50
         ggTimer -= 1
-        screen.blit(rest_sprite, rest_sprite.get_rect(center = (200,570)))
+        screen.blit(rest_sprite, rest_sprite.get_rect(center = (200, 570)))
 
     pg.display.flip()
-    dt = clock.tick(60) / 1000
+
+    dt = time.time() - st
+    if (16/1000 - dt) <= 0:
+        time.sleep(16/1000)
+
+    else:
+        time.sleep(16/1000 - dt)
